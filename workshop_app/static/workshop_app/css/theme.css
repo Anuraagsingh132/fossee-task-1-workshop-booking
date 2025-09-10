@@ -1,0 +1,29 @@
+/* Bootstrap 5 theme overrides for FOSSEE Workshops */
+:root {
+  --bs-font-sans-serif: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --bs-primary: #0b5ed7; /* modern blue */
+  --bs-secondary: #6c757d;
+  --bs-success: #198754;
+  --bs-info: #0dcaf0;
+  --bs-warning: #ffc107;
+  --bs-danger: #dc3545;
+  --bs-light: #f8f9fa;
+  --bs-dark: #212529;
+}
+
+body { font-family: var(--bs-font-sans-serif); }
+
+.navbar.bg-dark { background-image: linear-gradient(180deg, #1f2937, #0f172a); }
+
+.base-content { padding-top: 4.5rem; }
+
+.card { border-radius: .75rem; box-shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.1); }
+
+.btn-lg { border-radius: .6rem; }
+
+/* Form validation helpers */
+.was-validated .form-control:invalid, .form-control.is-invalid { border-color: var(--bs-danger); }
+.was-validated .form-control:valid, .form-control.is-valid { border-color: var(--bs-success); }
+
+/* Tables */
+.table-hover tbody tr:hover { background-color: rgba(13,110,253,.05); }
