@@ -156,6 +156,27 @@
             toast.querySelector('.toast-body').textContent = message;
             new bootstrap.Toast(toast, {delay: 3000}).show();
         }
+
+        // Auto show loader on any GET/POST form submit that navigates away
+        document.addEventListener('submit', function(e){
+            var form = e.target;
+            if(form && !form.hasAttribute('data-no-loader')){
+                try { showLoader(); } catch(err) {}
+            }
+        }, true);
+    </script>
+</div>
+
+<!-- Global Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="text-center text-white">
+        <div class="spinner-border text-light" role="status" aria-live="polite" aria-label="Loading"></div>
+        <div class="mt-3 small">Please wait…</div>
+    </div>
+    <script>
+        // Tiny global loader helpers
+        window.showLoader = function(){ document.getElementById('loadingOverlay')?.classList.add('show'); };
+        window.hideLoader = function(){ document.getElementById('loadingOverlay')?.classList.remove('show'); };
     </script>
 </div>
 

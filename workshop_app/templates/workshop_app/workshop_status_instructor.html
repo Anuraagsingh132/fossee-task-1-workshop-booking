@@ -66,8 +66,8 @@
                             <td>{{ workshop.date | date }}
 
                                 {% if workshop.date > today %}
-                                    <span class="material-icons datepicker btn"
-                                          data-toggle="popinfo"
+                        <span class="material-icons datepicker btn"
+                            data-bs-toggle="popinfo"
                                           title="Note"
                                           data-content="Click here to change date"
                                           onclick="changeDate('R,{{ workshop.date| safe }}, {{ forloop.counter }}')">event</span>

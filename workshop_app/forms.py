@@ -228,13 +228,13 @@ class ProfileForm(forms.ModelForm):
             {'class': "form-control", 'placeholder': 'Institute'}
         )
         self.fields['department'].widget.attrs.update(
-            {'class': "custom-select"}
+            {'class': "form-select"}
         )
         self.fields['title'].widget.attrs.update(
-            {'class': "custom-select"}
+            {'class': "form-select"}
         )
         self.fields['state'].widget.attrs.update(
-            {'class': "custom-select"}
+            {'class': "form-select"}
         )
         self.fields['phone_number'].widget.attrs.update(
             {'class': "form-control", 'placeholder': 'Phone Number'}

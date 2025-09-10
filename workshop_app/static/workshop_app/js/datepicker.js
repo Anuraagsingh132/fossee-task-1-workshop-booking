@@ -1,14 +1,23 @@
-//ToolTip popup function on-hover
+// ToolTip/Popover init for Bootstrap 5 (with graceful fallback to jQuery plugin)
 $(document).ready(function () {
-    $('[data-toggle="popover"]').popover({
-        placement: 'top',
-        trigger: 'hover'
-    });
+    var initOptions = { trigger: 'hover', placement: 'top' };
 
-    $('[data-toggle="popinfo"]').popover({
-        placement: 'top',
-        trigger: 'hover'
-    });
+    if (window.bootstrap && bootstrap.Popover) {
+        var createPopover = function(el){
+            var content = el.getAttribute('data-bs-content') || el.getAttribute('data-content') || '';
+            var title = el.getAttribute('data-bs-title') || el.getAttribute('title') || '';
+            try { new bootstrap.Popover(el, Object.assign({}, initOptions, { content: content, title: title })); } catch (e) {}
+        };
+        var popSel = document.querySelectorAll('[data-bs-toggle="popover"], [data-toggle="popover"]');
+        Array.prototype.forEach.call(popSel, function (el) { createPopover(el); });
+
+        var infoSel = document.querySelectorAll('[data-bs-toggle="popinfo"], [data-toggle="popinfo"]');
+        Array.prototype.forEach.call(infoSel, function (el) { createPopover(el); });
+    } else if ($.fn && $.fn.popover) {
+        // Legacy BS4
+        $('[data-toggle="popover"], [data-bs-toggle="popover"]').popover(initOptions);
+        $('[data-toggle="popinfo"], [data-bs-toggle="popinfo"]').popover(initOptions);
+    }
 });
 
 // Change date modal

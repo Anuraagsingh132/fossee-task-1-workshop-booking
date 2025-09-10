@@ -5,11 +5,7 @@
     Propose a workshop
 {% endblock %}
 
-{% block extra-dependencies %}
-    <link rel="stylesheet" href="{% static 'workshop_app/css/jquery-ui.css' %}" type="text/css"/>
-    <script src="{% static 'workshop_app/js/jquery-1.12.4.js' %}"></script>
-    <script src="{% static 'workshop_app/js/jquery-ui.min.js' %}"></script>
-{% endblock %}
+{% block extra-dependencies %}{% endblock %}
 
 {% block extra-custom-scripts %}
     <script>
@@ -58,59 +54,63 @@
     }
     </style>
 
-    <div class="container" align="center">
+        <div class="container">
         <div class="alert alert-info">
             Note: Before proposing the workshop, please check about the workshop in the
             <strong>Workshop Types</strong> section
         </div>
         <br><br>
-        <div class="col-md-6 col-md-offset-6">
-            <div class="card border-primary">
+                <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                        <div class="card border-primary shadow-sm">
                 <div class="card-header">
-                    <h3>Propose Workshop</h3>
+                                        <h3 class="h5 my-1">Propose Workshop</h3>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <form method="post">
+                                        <div>
+                                                <form method="post" class="needs-validation" novalidate>
                             {% csrf_token %}
-                            <br/>
-                            {{ form.workshop_type }}
-                            <br>
-                            {{ form.date }}
-                            <br>
-                            {{ form.tnc_accepted }} I accept the
-                            <a href="#" id="disp_tnc" data-toggle="modal"
-                            data-target="#exampleModalCenter">
+                                                        <div class="mb-3">
+                                                                <label class="form-label">Workshop Type</label>
+                                                                {{ form.workshop_type }}
+                                                        </div>
+                                                        <div class="mb-3">
+                                                                <label class="form-label">Preferred Date</label>
+                                                                {{ form.date }}
+                                                        </div>
+                                                        <div class="form-check mb-3">
+                                                                {{ form.tnc_accepted }}
+                                                                <label class="form-check-label"> I accept the</label>
+                                                                <a href="#" id="disp_tnc" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
                                 terms and conditions
-                            </a>
-                            <br>
+                                                                </a>
+                                                        </div>
                             {% if form.errors %}
-                                <br>
-                                <div style="text-align: left; border: 1px solid red; padding-top: 5px">
-                                    <h5 style="text-align: center; color: red; font-weight: bolder">Errors</h5>
+                                                                <div class="alert alert-danger" role="alert">
+                                                                        <h5 class="h6">Please fix the following errors:</h5>
                                     {{ form.errors }}
                                 </div>
                             {% endif %}
-                            <br>
-                            <button class="btn btn-success" type="submit">Submit</button>
+                                                        <button id="submitBtn" class="btn btn-success" type="submit">
+                                                                <span class="spinner-border spinner-border-sm me-2 d-none" id="submitSpinner" role="status" aria-hidden="true"></span>
+                                                                Submit
+                                                        </button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+                </div>
         <br>
 
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Terms and Conditions</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
 
@@ -118,4 +118,25 @@
             </div>
         </div>
     </div>
+        <script>
+                // Bootstrap 5 client-side validation + loading spinner
+                (function() {
+                    'use strict';
+                    var form = document.querySelector('.needs-validation');
+                    var btn = document.getElementById('submitBtn');
+                    var sp = document.getElementById('submitSpinner');
+                    if(form && btn && sp){
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            } else {
+                                btn.setAttribute('disabled', 'disabled');
+                                sp.classList.remove('d-none');
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    }
+                })();
+        </script>
 {% endblock %}
