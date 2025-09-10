@@ -23,13 +23,16 @@
 
 {% block content %}
     {% if not workshops %}
-        <div class="container">
-            <div class="jumbotron">
-                <h1>Welcome {{ user.first_name }}</h1>
-                <p>Your workshop related information will be shown here, Please navigate to <b>Workshop list</b> and
-                    depending upon
-                    your expertise and availability create a workshop by going to
-                    <b>Create Workshop</b>.</p>
+        <div class="container py-4">
+            <div class="p-5 mb-4 bg-light rounded-3">
+                <div class="container-fluid py-2">
+                    <h1 class="display-6 fw-semibold">Welcome {{ user.first_name }}</h1>
+                    <p class="col-lg-10 fs-6">Your workshop information will appear here. Browse the Workshop Types and create a workshop based on your expertise and availability.</p>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'workshop_app:workshop_type_list' %}" class="btn btn-primary btn-lg">View Workshop Types</a>
+                        <a href="{% url 'statistics_app:public' %}" class="btn btn-outline-secondary btn-lg">View Statistics</a>
+                    </div>
+                </div>
             </div>
         </div>
     {% else %}
@@ -74,12 +77,12 @@
                                             <input type="text" placeholder="New date" name="new_date"
                                                    class="rDate{{ forloop.counter }}"/><br>
                                             {% csrf_token %}
-                                            <button class="btn btn-primary btn-xs" type="submit">Save</button>
+                                            <button class="btn btn-primary btn-sm" type="submit">Save</button>
                                         </form>
                                     </div>
                                 {% endif %}
                             </td>
-                            <td><span class="badge badge-success">{{ workshop.get_status }}</span></td>
+                            <td><span class="badge bg-success">{{ workshop.get_status }}</span></td>
                         {% endif %}
                     </tr>
                     </tbody>
@@ -118,7 +121,7 @@
                             <td>{{ workshop.coordinator.profile.institute }}</td>
                             <td>{{ workshop.workshop_type }}</td>
                             <td>{{ workshop.date | date }}</td>
-                            <td><span class="badge badge-warning">{{ workshop.get_status }}</span></td>
+                            <td><span class="badge bg-warning text-dark">{{ workshop.get_status }}</span></td>
                             <td>
                                 <a href="{% url 'workshop_app:accept_workshop' workshop.id %}" class="btn btn-primary btn-sm"  onclick="return confirm('Once accepted you cannot reject, you have to personally contact the Coordinator if the workshop is to be cancelled. Are you sure you want to accept the workshop?')">
                                     Accept

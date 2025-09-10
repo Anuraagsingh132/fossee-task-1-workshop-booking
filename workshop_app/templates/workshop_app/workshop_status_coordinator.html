@@ -14,11 +14,16 @@
 
 {% block content %}
     {% if not workshops %}
-        <div class="container">
-            <div class="jumbotron">
-                <h1>Welcome {{ user.first_name }}</h1>
-                <p>Information Related to your workshops will be shown here, you can also
-                    propose a Workshop as per your available date in <strong>Propose Workshop tab</strong> .</p>
+        <div class="container py-4">
+            <div class="p-5 mb-4 bg-light rounded-3">
+                <div class="container-fluid py-2">
+                    <h1 class="display-6 fw-semibold">Welcome {{ user.first_name }}</h1>
+                    <p class="col-lg-10 fs-6">Your workshop details will appear here. You can propose a workshop as per your available date in the Propose Workshop tab.</p>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'workshop_app:propose_workshop' %}" class="btn btn-primary btn-lg">Propose Workshop</a>
+                        <a href="{% url 'workshop_app:workshop_type_list' %}" class="btn btn-outline-secondary btn-lg">View Workshop Types</a>
+                    </div>
+                </div>
             </div>
         </div>
     {% else %}
@@ -47,7 +52,7 @@
                             <td><a href="{% url 'workshop_app:workshop_details' workshop.id %}" >{{ workshop.workshop_type |capfirst }}</a></td>
                             <td>{{ workshop.instructor.get_full_name }}</td>
                             <td>{{ workshop.date | date }}</td>
-                            <td><span class="badge badge-success">{{ workshop.get_status }}</span></td>
+                            <td><span class="badge bg-success">{{ workshop.get_status }}</span></td>
                         {% endif %}
                     </tr>
                     </tbody>
@@ -75,7 +80,7 @@
                         {% if not workshop.status and workshop.tnc_accepted %}
                             <td><a href="{% url 'workshop_app:workshop_details' workshop.id %}" >{{ workshop.workshop_type |capfirst }}</a></td>
                             <td>{{ workshop.date | date }}</td>
-                            <td><span class="badge badge-warning">{{ workshop.get_status }}</span></td>
+                            <td><span class="badge bg-warning text-dark">{{ workshop.get_status }}</span></td>
                         {% endif %}
                     </tr>
                     </tbody>

@@ -25,7 +25,7 @@
             {% if workshop.status %}
                 <tr>
                     <th><label for="id_institute">Status :</label></th>
-                    <td><span class="badge badge-success">{{ workshop.get_status }}</span></td>
+                    <td><span class="badge bg-success">{{ workshop.get_status }}</span></td>
                 </tr>
                 <tr>
                     <th><label for="id_phone_number">Instructor :</label></th>
@@ -35,7 +35,7 @@
             {% else %}
                 <tr>
                     <th><label for="id_institute">Status :</label></th>
-                    <td><span class="badge badge-warning">{{ workshop.get_status }}</span></td>
+                    <td><span class="badge bg-warning text-dark">{{ workshop.get_status }}</span></td>
                 </tr>
             {% endif %}
         </table>
@@ -45,17 +45,17 @@
                 <form method="post">
                     <div class="card-header">
                         <div class="row">
-                            <div class="mx-3 font-weight-bold">Post a comment</div>
+                            <div class="mx-3 fw-semibold">Post a comment</div>
                             {% if request.user.profile.position == 'instructor' %}
-                                <div class="ml-5">{{ form.public }} Public</div>
-                                <div class="ml-1 text-muted">(Non-public comments are visible only to instructors)</div>
+                                <div class="ms-5">{{ form.public }} Public</div>
+                                <div class="ms-1 text-muted">(Non-public comments are visible only to instructors)</div>
                             {% endif %}
                         </div>
                     </div>
                     <div class="card-body">
                         {{ form.comment }}
                     </div>
-                    <button type="submit" class="float-right btn btn-primary btn-md m-2">Post</button>
+                    <button type="submit" class="float-end btn btn-primary btn-md m-2">Post</button>
                 </form>
             </div>
             <br><br>
@@ -65,12 +65,12 @@
                 <div class="card my-2">
                     <div class="card-header">
                         <div class="row">
-                            <div class="ml-3 font-weight-bold"><a
+                            <div class="ms-3 fw-semibold"><a
                                     href="{% url 'workshop_app:view_profile' comment.author_id %}">{{ comment.author }}</a></div>
                             {% if not comment.public %}
-                                <div class="ml-1"><span class="badge badge-dark">Hidden</span></div>
+                                <div class="ms-1"><span class="badge bg-dark">Hidden</span></div>
                             {% endif %}
-                            <div class="ml-3 text-muted">{{ comment.created_date }}</div>
+                            <div class="ms-3 text-muted">{{ comment.created_date }}</div>
                         </div>
                     </div>
                     <div class="card-body">

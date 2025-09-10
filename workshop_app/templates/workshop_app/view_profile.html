@@ -63,13 +63,13 @@
                         </td>
                     </tr>
                 {% else %}
-                    <tr>
-                        <td><span class="badge badge-warning">Pending</span></td>
-                        <td><label for="id_workshop_date">{{ workshop.date }}</label>
-                        </td>
-                        <td><label for="id_workshop_type">{{ workshop.workshop_type }}</label>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td><span class="badge bg-warning text-dark">Pending</span></td>
+                            <td><label for="id_workshop_date">{{ workshop.date }}</label>
+                            </td>
+                            <td><label for="id_workshop_type">{{ workshop.workshop_type }}</label>
+                            </td>
+                        </tr>
                 {% endif %}
             {% endfor %}
             </table>
@@ -87,18 +87,14 @@
                                 {% for field in form %}
                                     {% for error in field.errors %}
                                         <div class="alert alert-dismissible alert-danger">
-                                            <button type="button" class="close" data-dismiss="alert">
-                                                <i class="fa fa-close"></i>
-                                            </button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                             <strong>{{field.label}} : {{ error|escape }}</strong>
                                         </div>
                                     {% endfor %}
                                 {% endfor %}
                                 {% for error in form.non_field_errors %}
                                     <div class="alert alert-dismissible alert-danger">
-                                        <button type="button" class="close" data-dismiss="alert">
-                                            <i class="fa fa-close"></i>
-                                        </button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         <strong>{{field.label}} : {{ error|escape }}</strong>
                                     </div>
                                 {% endfor %}

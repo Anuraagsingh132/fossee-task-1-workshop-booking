@@ -80,7 +80,7 @@
                         </div>
                     {% if form.id.value %}
                     <div class="col-1">
-                        <a href="{% url 'workshop_app:delete_attachment_file' form.id.value %}"><button class="btn btn-md btn-danger float-right" type="button">Delete</button></a>
+                        <a href="{% url 'workshop_app:delete_attachment_file' form.id.value %}"><button class="btn btn-md btn-danger float-end" type="button">Delete</button></a>
                     </div>
                     {% endif %}
                     </div>
@@ -90,7 +90,7 @@
             {% endfor %}
             <div class="row my-3">
                 <div class="col-12">
-                    <button type="submit" class="btn btn-md btn-primary float-right m-3">Save</button>
+                    <button type="submit" class="btn btn-md btn-primary float-end m-3">Save</button>
                 </div>
             </div>
         </form>
