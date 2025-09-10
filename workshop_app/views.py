@@ -38,8 +38,14 @@ __credits__ = ["Mahesh Gudi", "Aditya P.", "Ankit Javalkar",
 
 # Helper functions
 
+# workshop_app/views.py
+
 def is_email_checked(user):
-    return user.profile.is_email_verified
+    try:
+        return user.profile.is_email_verified
+    except Profile.DoesNotExist:
+        # If a profile doesn't exist for any reason, treat as not verified.
+        return False
 
 
 def is_instructor(user):
