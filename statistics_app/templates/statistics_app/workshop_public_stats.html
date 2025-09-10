@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 mb-4">
             <form method="GET">
                 <div class="card">
                     <div class="card-header">
@@ -14,30 +14,31 @@
                                 <h3><u>Filters</u></h3>
                             </div>
                             <div class="col-md-4">
-                                <a href="{% url 'statistics_app:public' %}" class="btn btn-outline-info">
+                                <a href="{% url 'statistics_app:public' %}" class="btn btn-outline-secondary btn-sm">
                                     <i class="fa fa-times"></i>&nbsp;Clear
                                 </a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div>From date: {{form.from_date}}</div>
-                        <div>To date: {{form.to_date}}</div>
-                        <div>Workshop: {{form.workshop_type}}</div>
-                        <div>State: {{form.state}}</div>
-                        <div>{{form.sort.help_text}}: {{form.sort}}</div>
+                        <div class="mb-2"><label class="form-label small">From date</label> {{form.from_date}}</div>
+                        <div class="mb-2"><label class="form-label small">To date</label> {{form.to_date}}</div>
+                        <div class="mb-2"><label class="form-label small">Workshop</label> {{form.workshop_type}}</div>
+                        <div class="mb-2"><label class="form-label small">State</label> {{form.state}}</div>
+                        <div class="mb-2"><label class="form-label small">{{form.sort.help_text}}</label> {{form.sort}}</div>
                         {% if request.user.is_authenticated %}
-                        <div>{{form.show_workshops.help_text}}: {{form.show_workshops}}</div>
+                        <div class="mb-2"><label class="form-label small">{{form.show_workshops.help_text}}</label> {{form.show_workshops}}</div>
                         {% endif %}
                         <br>
                         <div class="row justify-content-center">
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-success">
+                            <div class="col-md-5 mb-2">
+                                <button type="submit" class="btn btn-primary w-100">
                                     <i class="fa fa-eye"></i>&nbsp;View
                                 </button>
                             </div>
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-info" name="download" value="download">
+                            <div class="col-md-7">
+                                <button id="downloadBtn" type="submit" class="btn btn-outline-primary w-100" name="download" value="download">
+                                    <span class="spinner-border spinner-border-sm me-2 d-none" id="downloadSpinner" role="status" aria-hidden="true"></span>
                                     <i class="fa fa-download"></i>&nbsp;Download
                                 </button>
                             </div>
@@ -52,41 +53,36 @@
                     {% include "statistics_app/paginator.html" %}
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-info" id="state_graph">
+                    <button class="btn btn-outline-secondary w-100 mb-2" id="state_graph">
                         <i class="fa fa-bar-chart"></i>&nbsp;State chart
                     </button>
                 </div>
                 <div class="col-md-3">
-                    <button class="btn btn-info" id="type_graph">
+                    <button class="btn btn-outline-secondary w-100 mb-2" id="type_graph">
                         <i class="fa fa-bar-chart"></i>&nbsp;Workshops chart
                     </button>
                 </div>
             </div>
-            <table class="table table-responsive-sm">
-                <thead>
-                    <tr>
-                        <th>Sr No.</th>
-                        <th>Coordinator Name</th>
-                        <th>Institute Name</th>
-                        <th>Instructor Name</th>
-                        <th>Workshop Name</th>
-                        <th>Workshop Date</th>
-                    </tr>
-                </thead>
-                {% csrf_token %}
+            <!-- Card grid replacing table for better mobile UX -->
+            {% csrf_token %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
                 {% for workshop in objects %}
-                    <tbody>
-                        <tr>
-                            <td>{{ forloop.counter0|add:objects.start_index}}</td>
-                            <td>{{ workshop.coordinator.get_full_name | capfirst }}</td>
-                            <td>{{ workshop.coordinator.profile.institute | capfirst }}</td>
-                            <td>{{ workshop.instructor.get_full_name | capfirst }}</td>
-                            <td>{{ workshop.workshop_type.name }}</td>
-                            <td>{{ workshop.date | date}}</td>
-                        </tr>
-                    </tbody>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <span class="badge bg-light text-dark">#{{ forloop.counter0|add:objects.start_index}}</span>
+                                <span class="badge bg-primary-subtle text-primary">{{ workshop.workshop_type.name }}</span>
+                            </div>
+                            <h5 class="card-title mb-1">{{ workshop.coordinator.profile.institute | capfirst }}</h5>
+                            <p class="card-subtitle text-muted mb-2">Coordinator: {{ workshop.coordinator.get_full_name | capfirst }}</p>
+                            <p class="mb-1">Instructor: <strong>{{ workshop.instructor.get_full_name | capfirst }}</strong></p>
+                            <p class="mb-0"><i class="fa fa-calendar"></i> {{ workshop.date | date}}</p>
+                        </div>
+                    </div>
+                </div>
                 {% endfor %}
-            </table>
+            </div>
             {% include "statistics_app/paginator.html" %}
         </div>
     </div>
@@ -98,10 +94,10 @@
 </div>
 
 <script type="text/javascript">
-    var state_labels = {{ws_states|safe}};
-    var state_data = {{ws_count|safe}};
-    var type_labels = {{ws_type|safe}};
-    var type_data = {{ws_type_count|safe}};
+    var state_labels = JSON.parse('{{ ws_states|escapejs }}');
+    var state_data = JSON.parse('{{ ws_count|escapejs }}');
+    var type_labels = JSON.parse('{{ ws_type|escapejs }}');
+    var type_data = JSON.parse('{{ ws_type_count|escapejs }}');
     var chart;
     $("#state_graph").on("click", function() {
         show_graph(state_labels, state_data, "State wise workshops");
@@ -133,6 +129,15 @@
         $("#dialog").dialog({
             width: 900,
             height: 500
+        });
+    }
+    // Show spinner on download
+    const dlBtn = document.getElementById('downloadBtn');
+    const dlSp = document.getElementById('downloadSpinner');
+    if(dlBtn){
+        dlBtn.addEventListener('click', function(){
+            if(dlSp) dlSp.classList.remove('d-none');
+            setTimeout(() => { if(dlSp) dlSp.classList.add('d-none'); }, 2000);
         });
     }
 </script>
