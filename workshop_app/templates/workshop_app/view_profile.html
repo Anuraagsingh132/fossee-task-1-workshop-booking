@@ -2,7 +2,6 @@
 
 {% block title %} Profile {% endblock %}
 
-{% csrf_token %}
 {% block content %}
 
     <div class="container">
@@ -22,24 +21,24 @@
                 </tr>
                 <tr>
                     <th><label for="id_institute"><h5>Institute:</h5></label></th>
-                    <th><label for="id_institute"><h5>{{ coordinator_profile.user.profile.institute }}</h5></label></th>
+                    <th><label for="id_institute"><h5>{{ coordinator_profile.institute }}</h5></label></th>
                 </tr>
                 <tr>
                     <th><label for="id_phone_number"><h5>Phone Number:</h5></label></th>
-                    <th><label for="id_phone_number"><h5>{{ coordinator_profile.user.profile.phone_number }}</h5></label>
+                    <th><label for="id_phone_number"><h5>{{ coordinator_profile.phone_number }}</h5></label>
                     </th>
                 </tr>
                 <tr>
                     <th><label for="id_department"><h5>Department:</h5></label></th>
-                    <th><label for="id_department"><h5>{{ coordinator_profile.user.profile.department }}</h5></label></th>
+                    <th><label for="id_department"><h5>{{ coordinator_profile.department }}</h5></label></th>
                 </tr>
                 <tr>
                     <th><label for="id_location"><h5>Location:</h5></label></th>
-                    <th><label for="id_location"><h5>{{ coordinator_profile.user.profile.location }}</h5></label></th>
+                    <th><label for="id_location"><h5>{{ coordinator_profile.location }}</h5></label></th>
                 </tr>
                 <tr>
                     <th><label for="id_position"><h5>Position:</h5></label></th>
-                    <th><label for="id_position"><h5>{{ coordinator_profile.user.profile.position }}</h5></label></th>
+                    <th><label for="id_position"><h5>{{ coordinator_profile.position }}</h5></label></th>
                 </tr>
             </table>
             <br>
@@ -75,14 +74,13 @@
             </table>
             </div>
             <br><br>
-        {% else %}
-            <form action="" method="post">
-              {% csrf_token %}
+                {% else %}
+                        <form action="" method="post">
+                            {% csrf_token %}
                 <div class="row justify-content-center form-group">
                     <div class="col-md-6">
-                    <form action="" method="post">
                         <fieldset>
-                            {% csrf_token %}
+                                                        {% csrf_token %}
                             {% if form.errors %}
                                 {% for field in form %}
                                     {% for error in field.errors %}
@@ -116,7 +114,6 @@
                             <i class="fa fa-pencil-square-o"></i>&nbsp;Update</button>
                         <a href="{% url 'workshop_app:index' %}" class="btn btn-primary btn-lg">Cancel
                         </a>
-                    </form>
                     </div>
                 </div>
             </form>

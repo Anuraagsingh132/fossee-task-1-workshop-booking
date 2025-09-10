@@ -3,11 +3,6 @@ from django.db.models import Q
 from django.forms import inlineformset_factory, model_to_dict
 from django.http import JsonResponse, Http404
 from django.urls import reverse
-
-try:
-    from StringIO import StringIO as string_io
-except ImportError:
-    from io import BytesIO as string_io
 from datetime import datetime
 import os
 
@@ -24,7 +19,8 @@ from .forms import (
 from .models import (
     Profile, User,
     Workshop, Comment,
-    WorkshopType, AttachmentFile
+    WorkshopType, AttachmentFile,
+    department_choices,
 )
 from .send_mails import send_email
 
@@ -87,7 +83,8 @@ def user_login(request):
         form = UserLoginForm(request.POST)
         if form.is_valid():
             user = form.cleaned_data
-            if user.profile.is_email_verified:
+            # Use defensive check to handle users without a Profile gracefully
+            if is_email_checked(user):
                 login(request, user)
                 return redirect(get_landing_page(user))
             else:
@@ -469,7 +466,10 @@ def view_profile(request, user_id):
     """Instructor can view coordinator profile """
     user = request.user
     if is_instructor(user) and is_email_checked(user):
-        coordinator_profile = Profile.objects.get(user_id=user_id)
+        coordinator_profile = Profile.objects.filter(user_id=user_id).select_related('user').first()
+        if not coordinator_profile:
+            messages.add_message(request, messages.ERROR, "Profile not found for this user.")
+            return redirect(get_landing_page(user))
         workshops = Workshop.objects.filter(coordinator=user_id).order_by(
             'date')
 
@@ -485,7 +485,17 @@ def view_own_profile(request):
     user = request.user
     if user.is_superuser:
         return redirect("admin")
-    profile = user.profile
+    # Ensure a Profile exists for the user to avoid RelatedObjectDoesNotExist
+    profile, _ = Profile.objects.get_or_create(
+        user=user,
+        defaults={
+            # Provide safe minimal defaults; user will be prompted to update
+            'institute': '',
+            'department': department_choices[0][0] if department_choices else '',
+            'phone_number': '0000000000',
+            'location': '',
+        }
+    )
     if request.method == 'POST':
         form = ProfileForm(request.POST, user=user, instance=profile)
         if form.is_valid():
